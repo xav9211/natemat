@@ -16,11 +16,14 @@ public class ListLinks {
         print("Fetching %s...", url);
 
         Document doc = Jsoup.connect(url).get();
+
+        System.out.println("natemat.pl text: " + doc.text());
+
         Elements links = doc.select("a[href]");
 
         print("\nLinks: (%d)", links.size());
         for (Element link : links) {
-            print(" * a: <%s>  (%s)", link.attr("abs:href"), trim(link.text(), 35));
+            print(" * a: <%s>  (%s)", link.attr("href"), trim(link.text(), 35));
         }
     }
 
