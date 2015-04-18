@@ -7,9 +7,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-/**
- * Example program to list links from a URL.
- */
 public class ListLinks {
     public static void main(String[] args) throws IOException {
         String url = "http://natemat.pl/";
@@ -19,11 +16,16 @@ public class ListLinks {
 
         System.out.println("natemat.pl text: " + doc.text());
 
-        Elements links = doc.select("a[href]");
+        Elements links = doc.select("a[href^=http://natemat.pl/]");
 
         print("\nLinks: (%d)", links.size());
         for (Element link : links) {
-            print(" * a: <%s>  (%s)", link.attr("href"), trim(link.text(), 35));
+            String subUrl = link.attr("href");
+            Document tmpDoc = Jsoup.connect(subUrl).get();
+            System.out.println("URL: " + subUrl);
+            System.out.println("Text length: " + tmpDoc.text().length());
+            System.out.println("Html length: " + tmpDoc.html().length());
+            System.out.println("Number of outgoing links: " + tmpDoc.select("a[href]").size());
         }
     }
 
