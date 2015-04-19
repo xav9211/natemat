@@ -32,11 +32,11 @@ public class MyCrawler extends WebCrawler {
             String text = htmlParseData.getText();
             String html = htmlParseData.getHtml();
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
-            //List<WebURL> filteredURLs = filterURLs(links, "http://natemat.pl/");
+            List<WebURL> filteredURLs = filterURLs(links, "http://natemat.pl/");
 
             System.out.println("Text length: " + text.length());
             System.out.println("Html length: " + html.length());
-            System.out.println("Number of links: " + links.size());
+            System.out.println("Number of links: " + filteredURLs.size());
         }
     }
 

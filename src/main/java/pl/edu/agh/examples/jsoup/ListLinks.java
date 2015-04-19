@@ -6,6 +6,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ListLinks {
     public static void main(String[] args) throws IOException {
@@ -21,7 +24,7 @@ public class ListLinks {
 
         System.out.println("natemat.pl text: " + doc.text());
 
-        Elements links = doc.select("a[href^=" + url + "]");
+        Elements links = doc.select("a[href^=" + url + "], a[href^=/]");
 
         print("\nLinks: (%d)", links.size());
         for (Element link : links) {
@@ -30,8 +33,15 @@ public class ListLinks {
             System.out.println("URL: " + subUrl);
             System.out.println("Text length: " + tmpDoc.text().length());
             System.out.println("Html length: " + tmpDoc.html().length());
-            System.out.println("Number of links: " + tmpDoc.select("a[href^=" + url + "]").size());
+            System.out.println("Number of links: " + findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
         }
+    }
+
+    private static Set<String> findUniqueLinks(Collection<Element> links) {
+        Set<String> uniqueLinks = new HashSet<String>();
+        for (Element link : links)
+            uniqueLinks.add(link.attr("href"));
+        return uniqueLinks;
     }
 
     private static void print(String msg, Object... args) {
