@@ -5,6 +5,9 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -29,10 +32,19 @@ public class MyCrawler extends WebCrawler {
             String text = htmlParseData.getText();
             String html = htmlParseData.getHtml();
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
+            //List<WebURL> filteredURLs = filterURLs(links, "http://natemat.pl/");
 
             System.out.println("Text length: " + text.length());
             System.out.println("Html length: " + html.length());
-            System.out.println("Number of outgoing links: " + links.size());
+            System.out.println("Number of links: " + links.size());
         }
+    }
+
+    public List<WebURL> filterURLs(Collection<WebURL> urls, String filterPrefix) {
+        List<WebURL> filteredURLs = new ArrayList<WebURL>();
+        for (WebURL url : urls)
+            if (url.getURL().startsWith(filterPrefix))
+                filteredURLs.add(url);
+        return filteredURLs;
     }
 }
