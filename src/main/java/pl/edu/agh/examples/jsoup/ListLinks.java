@@ -26,7 +26,8 @@ public class ListLinks {
 
         Elements links = doc.select("a[href^=" + url + "], a[href^=/]");
 
-        print("\nLinks: (%d)", links.size());
+        print("\nLinks: (%d)", findUniqueLinks(links).size());
+
         for (Element link : links) {
             String subUrl = link.attr("href");
             Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
