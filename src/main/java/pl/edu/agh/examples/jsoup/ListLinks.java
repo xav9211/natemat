@@ -10,32 +10,48 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ListLinks {
-    public static void main(String[] args) throws IOException {
+import javax.swing.*;
+import javax.swing.text.StringContent;
 
-        String url = "http://natemat.pl/";
+public class ListLinks {
+
+    private static JTextArea mainTextField;
+    private static Elements links;
+    //10 seconds
+    private final static int TIMEOUT = 10 * 1000;
+    private static String url = "http://natemat.pl/";
+
+    public static void main(String[] args) throws IOException {
 
         print("Fetching %s...", url);
 
-        //10 seconds
-        final int TIMEOUT = 10 * 1000;
 
         Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
 
         System.out.println("natemat.pl text: " + doc.text());
 
-        Elements links = doc.select("a[href^=" + url + "], a[href^=/]");
+        links = doc.select("a[href^=" + url + "], a[href^=/]");
 
         print("\nLinks: (%d)", findUniqueLinks(links).size());
 
-        for (Element link : links) {
-            String subUrl = link.attr("href");
-            Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
-            System.out.println("URL: " + subUrl);
-            System.out.println("Text length: " + tmpDoc.text().length());
-            System.out.println("Html length: " + tmpDoc.html().length());
-            System.out.println("Number of links: " + findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
-        }
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    createAndShowGUI();
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+//        for (Element link : links) {
+//            String subUrl = link.attr("href");
+//            Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
+//            System.out.println("URL: " + subUrl);
+//            System.out.println("Text length: " + tmpDoc.text().length());
+//            System.out.println("Html length: " + tmpDoc.html().length());
+//            System.out.println("Number of links: " + findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
+//        }
     }
 
     private static Set<String> findUniqueLinks(Collection<Element> links) {
@@ -54,5 +70,35 @@ public class ListLinks {
             return s.substring(0, width-1) + ".";
         else
             return s;
+    }
+
+    private static void createAndShowGUI() throws IOException {
+        //Create and set up the window.
+        JFrame frame = new JFrame("Na-temat");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setSize(800, 600);
+
+        mainTextField = new JTextArea();
+        JScrollPane scrl = new JScrollPane(mainTextField);
+        frame.getContentPane().add(scrl);
+
+        //Display the window.
+        frame.setVisible(true);
+
+        for (Element link : links) {
+            String subUrl = link.attr("href");
+            Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
+            String newLine;
+            if(links.indexOf(link) == 0){
+                newLine = "";
+            }else{
+                newLine = "\n";
+            }
+            mainTextField.setText(mainTextField.getText() + newLine + "URL: " + subUrl);
+            mainTextField.setText(mainTextField.getText() + "\nText length: " + tmpDoc.text().length());
+            mainTextField.setText(mainTextField.getText() + "\nHtml length: " + tmpDoc.html().length());
+            mainTextField.setText(mainTextField.getText() + "\nNumber of links: " + findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
+        }
     }
 }
