@@ -1,4 +1,4 @@
-package pl.edu.agh.examples.crawler4j;
+package main.java.pl.edu.agh.toik.examples.crawler4j;
 
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;

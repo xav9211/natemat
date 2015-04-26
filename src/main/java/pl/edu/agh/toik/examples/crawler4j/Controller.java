@@ -1,4 +1,4 @@
-package pl.edu.agh.examples.crawler4j;
+package main.java.pl.edu.agh.toik.examples.crawler4j;
 
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -15,6 +15,7 @@ public class Controller {
 
         config.setMaxDepthOfCrawling(1);
         config.setCrawlStorageFolder(crawlStorageFolder);
+        config.setResumableCrawling(true);
 
         /*
          * Instantiate the controller for this crawl.

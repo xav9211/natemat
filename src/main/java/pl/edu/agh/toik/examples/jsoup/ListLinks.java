@@ -1,4 +1,4 @@
-package pl.edu.agh.examples.jsoup;
+package main.java.pl.edu.agh.toik.examples.jsoup;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.*;
-import javax.swing.text.StringContent;
 
 public class ListLinks {
 
