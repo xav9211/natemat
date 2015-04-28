@@ -1,53 +1,44 @@
 package main.java.pl.edu.agh.toik.crawler;
 
-import edu.uci.ics.crawler4j.crawler.Page;
-import edu.uci.ics.crawler4j.crawler.WebCrawler;
-import edu.uci.ics.crawler4j.parser.HtmlParseData;
-import edu.uci.ics.crawler4j.url.WebURL;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
+import java.io.IOException;
 
-public class NaTematCrawler extends WebCrawler implements ICrawler {
+@Component
+public class NaTematCrawler implements ICrawler {
 
-    private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
-            + "|png|mp3|mp3|zip|gz))$");
+    private final static int TIMEOUT = 10 * 1000;
 
-    @Override
-    public boolean shouldVisit(Page referringPage, WebURL url) {
-        String href = url.getURL().toLowerCase();
-        return !FILTERS.matcher(href).matches()
-                && href.startsWith("http://natemat.pl/");
+    private ICrawlerService crawlerService;
+    private ICrawlerSettings crawlerSettings;
+
+    @Autowired
+    public NaTematCrawler(ICrawlerService crawlerService, ICrawlerSettings crawlerSettings) {
+        this.crawlerService = crawlerService;
+        this.crawlerSettings = crawlerSettings;
     }
 
     @Override
-    public void visit(Page page) {
-        String url = page.getWebURL().getURL();
-        System.out.println("URL: " + url);
+    public void startCrawler(String url) throws IOException {
+        Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+        System.out.println("natemat.pl text: " + doc.text());
 
-        if (page.getParseData() instanceof HtmlParseData) {
-            HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-            String text = htmlParseData.getText();
-            String html = htmlParseData.getHtml();
-            Set<WebURL> links = htmlParseData.getOutgoingUrls();
-            List<WebURL> filteredURLs = filterURLs(links, "http://natemat.pl/");
+        Elements links = doc.select("a[href^=" + url + "], a[href^=/]");
 
-            System.out.println("Text length: " + text.length());
-            System.out.println("Html length: " + html.length());
-            System.out.println("Number of links: " + filteredURLs.size());
+        System.out.println("\nLinks: " + crawlerService.findUniqueLinks(links).size());
+
+        for (Element link : links) {
+            String subUrl = link.attr("href");
+            Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
+            System.out.println("URL: " + subUrl);
+            System.out.println("Text length: " + tmpDoc.text().length());
+            System.out.println("Html length: " + tmpDoc.html().length());
+            System.out.println("Number of links: " + crawlerService.findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
         }
     }
-
-    @Override
-    public List<WebURL> filterURLs(Collection<WebURL> urls, String filterPrefix) {
-        List<WebURL> filteredURLs = new ArrayList<WebURL>();
-        for (WebURL url : urls)
-            if (url.getURL().startsWith(filterPrefix))
-                filteredURLs.add(url);
-        return filteredURLs;
-    }
-
 }
