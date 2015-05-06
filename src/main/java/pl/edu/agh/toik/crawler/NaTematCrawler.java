@@ -26,11 +26,8 @@ public class NaTematCrawler implements ICrawler {
     @Override
     public void startCrawler(String url) throws IOException {
         Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
-        System.out.println("natemat.pl text: " + doc.text());
 
         Elements links = doc.select("a[href^=" + url + "], a[href^=/]");
-
-        System.out.println("\nLinks: " + crawlerService.findUniqueLinks(links).size());
 
         for (Element link : links) {
             String subUrl = link.attr("href");
