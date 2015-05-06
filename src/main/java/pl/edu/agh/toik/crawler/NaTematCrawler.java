@@ -30,11 +30,12 @@ public class NaTematCrawler implements ICrawler {
         Elements links = doc.select("a[href^=" + url + "], a[href^=/]");
 
         for (Element link : links) {
-            String subUrl = link.attr("href");
+            String subUrl = link.attr("abs:href");
             Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
             System.out.println("URL: " + subUrl);
             System.out.println("Text length: " + tmpDoc.text().length());
             System.out.println("Html length: " + tmpDoc.html().length());
+            System.out.println("Number of comments: " + crawlerService.getNumberOfCommentsForUrl(subUrl));
             System.out.println("Number of links: " + crawlerService.findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
         }
     }
