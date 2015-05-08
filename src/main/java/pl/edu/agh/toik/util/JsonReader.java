@@ -34,12 +34,16 @@ public class JsonReader {
         //Wziecie przykladowego komentarza
         for (int i = 0; i < json1.getJSONArray("data").length(); ++i) {
             System.out.println("Comment no. " + i);
-            System.out.println(json1.getJSONArray("data").getJSONObject(i).get("message"));
+            System.out.println("Author: " + json1.getJSONArray("data").getJSONObject(i).getJSONObject("from").getString("name"));
+            System.out.println("Created date: " + json1.getJSONArray("data").getJSONObject(i).getString("created_time"));
+            System.out.println("Like counter: " + json1.getJSONArray("data").getJSONObject(i).getInt("like_count"));
+            System.out.println("Content: ");
+            System.out.println(json1.getJSONArray("data").getJSONObject(i).getString("message"));
         }
         //Liczba wszystkich komentarzy
         System.out.println("Number of comments: " + json1.getJSONArray("data").length());
         //Liczba wszystkich komentarzy + podkomentarzy
         JSONObject json2 = readJsonFromUrl("http://graph.facebook.com/" + url);
-        System.out.println("Number of all comments: " + json2.get("comments"));
+        System.out.println("Number of all comments: " + json2.getInt("comments"));
     }
 }
