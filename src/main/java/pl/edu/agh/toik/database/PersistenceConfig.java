@@ -11,28 +11,25 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories("main.java.pl.edu.agh.toik.database.repositories")
+@EnableJpaRepositories("main.java.pl.edu.agh.toik.database.repository")
 @PropertySource({"classpath:application.properties"})
+@ComponentScan("main.java.pl.edu.agh.toik.database.service")
 public class PersistenceConfig {
 
     @Autowired
     private Environment env;
-
-    @Bean
-    @Autowired
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager txManager = new HibernateTransactionManager();
-        txManager.setSessionFactory(sessionFactory);
-
-        return txManager;
-    }
 
     @Bean
     public DataSource dataSource() {
@@ -44,6 +41,15 @@ public class PersistenceConfig {
 
         return dataSource;
     }
+
+    /*@Bean
+    @Autowired
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager txManager = new HibernateTransactionManager();
+        txManager.setSessionFactory(sessionFactory);
+
+        return txManager;
+    }*/
 
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
@@ -63,6 +69,31 @@ public class PersistenceConfig {
                 setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
             }
         };
+    }
+
+    //-----------------------------------------------------------------------------------------------
+
+    @Bean
+    public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory);
+        return transactionManager;
+    }
+
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+        return jpaVendorAdapter;
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        localContainerEntityManagerFactoryBean.setDataSource(dataSource());
+        localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
+        localContainerEntityManagerFactoryBean.setPackagesToScan("main.java.pl.edu.agh.toik.database");
+        localContainerEntityManagerFactoryBean.setJpaProperties(hibernateProperties());
+        return localContainerEntityManagerFactoryBean;
     }
 
 }

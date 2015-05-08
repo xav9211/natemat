@@ -1,6 +1,8 @@
 package main.java.pl.edu.agh.toik.crawler;
 
+import main.java.pl.edu.agh.toik.database.model.Comment;
 import main.java.pl.edu.agh.toik.util.JsonReader;
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.nodes.Element;
@@ -19,15 +21,22 @@ public class NaTematCrawlerService implements ICrawlerService {
     }
 
     @Override
-    public List<String> getCommentsForUrl(String url) throws IOException {
+    public List<Comment> getCommentsForUrl(String url) throws IOException {
 
-        List<String> comments = new ArrayList<String>();
+        List<Comment> comments = new ArrayList<Comment>();
 
         JSONObject json1 = JsonReader.readJsonFromUrl("http://graph.facebook.com/comments?id=" + url);
         JSONArray data = json1.getJSONArray("data");
 
         for (int i = 0; i < data.length(); ++i) {
-            comments.add((String) data.getJSONObject(i).get("message"));
+            String commentId = data.getJSONObject(i).getString("id");
+            String commentAuthor = data.getJSONObject(i).getJSONObject("from").getString("name");
+            DateTime commentCreatedDate = DateTime.parse(data.getJSONObject(i).getString("created_time"));
+            Integer commentLikeCounter = data.getJSONObject(i).getInt("like_count");
+            String commentContent = data.getJSONObject(i).getString("message");
+
+            Comment comment = new Comment(commentId, commentAuthor, commentCreatedDate, commentLikeCounter, commentContent);
+            comments.add(comment);
         }
 
         return comments;
