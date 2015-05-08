@@ -43,7 +43,7 @@ public class NaTematCrawler implements ICrawler {
             System.out.println("Number of comments: " + crawlerService.getNumberOfCommentsForUrl(subUrl));
             System.out.println("Number of links: " + crawlerService.findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
 
-            naTematCrawlerDB.getCommentServiceDB().saveComments(crawlerService.getCommentsForUrl(subUrl));
+            naTematCrawlerDB.getCommentService().saveComments(crawlerService.getCommentsForUrl(subUrl));
         }
     }
 }

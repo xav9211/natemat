@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class NaTematCrawlerDB {
     @Autowired
-    private CommentService commentServiceDB;
+    private CommentService commentService;
 
-    public CommentService getCommentServiceDB() {
-        return commentServiceDB;
+    public CommentService getCommentService() {
+        return commentService;
     }
 }
