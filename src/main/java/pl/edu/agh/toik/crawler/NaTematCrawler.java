@@ -1,5 +1,6 @@
 package main.java.pl.edu.agh.toik.crawler;
 
+import main.java.pl.edu.agh.toik.database.NaTematCrawlerDB;
 import main.java.pl.edu.agh.toik.database.service.CommentService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,7 +20,7 @@ public class NaTematCrawler implements ICrawler {
     private ICrawlerSettings crawlerSettings;
 
     @Autowired
-    private CommentService commentServiceDB;
+    private NaTematCrawlerDB naTematCrawlerDB;
 
     @Autowired
     public NaTematCrawler(ICrawlerService crawlerService, ICrawlerSettings crawlerSettings) {
@@ -42,7 +43,7 @@ public class NaTematCrawler implements ICrawler {
             System.out.println("Number of comments: " + crawlerService.getNumberOfCommentsForUrl(subUrl));
             System.out.println("Number of links: " + crawlerService.findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
 
-            commentServiceDB.saveComments(crawlerService.getCommentsForUrl(subUrl));
+            naTematCrawlerDB.getCommentServiceDB().saveComments(crawlerService.getCommentsForUrl(subUrl));
         }
     }
 }

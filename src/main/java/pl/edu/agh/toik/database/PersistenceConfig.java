@@ -25,7 +25,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories("main.java.pl.edu.agh.toik.database.repository")
 @PropertySource({"classpath:application.properties"})
-@ComponentScan("main.java.pl.edu.agh.toik.database.service")
+@ComponentScan("main.java.pl.edu.agh.toik.database")
 public class PersistenceConfig {
 
     @Autowired
