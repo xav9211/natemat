@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface ICrawlerService {
-    Set<String> findUniqueLinks(Collection<Element> links);
+    Set<Element> findUniqueLinks(Collection<Element> links);
     List<Comment> getCommentsForUrl(String url) throws IOException;
     int getNumberOfCommentsForUrl(String url) throws IOException;
 }

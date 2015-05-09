@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Set;
 
 @Component
 public class NaTematCrawler implements ICrawler {
@@ -32,7 +33,7 @@ public class NaTematCrawler implements ICrawler {
     public void startCrawler(String url) throws IOException {
         Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
 
-        Elements links = doc.select("a[href^=" + url + "], a[href^=/]");
+        Set<Element> links = crawlerService.findUniqueLinks(doc.select("a[href^=" + url + "], a[href^=/]"));
 
         for (Element link : links) {
             String subUrl = link.attr("abs:href");

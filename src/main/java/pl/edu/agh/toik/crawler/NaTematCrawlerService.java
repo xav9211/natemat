@@ -13,10 +13,17 @@ import java.util.*;
 public class NaTematCrawlerService implements ICrawlerService {
 
     @Override
-    public Set<String> findUniqueLinks(Collection<Element> links) {
-        Set<String> uniqueLinks = new HashSet<String>();
-        for (Element link : links)
-            uniqueLinks.add(link.attr("href"));
+    public Set<Element> findUniqueLinks(Collection<Element> links) {
+
+        Set<String> uniqueNameLinks = new HashSet<String>();
+        Set<Element> uniqueLinks = new LinkedHashSet<Element>();
+
+        for (Element link : links) {
+            uniqueNameLinks.add(link.attr("href"));
+            if (uniqueNameLinks.size() > uniqueLinks.size())
+                uniqueLinks.add(link);
+        }
+
         return uniqueLinks;
     }
 
