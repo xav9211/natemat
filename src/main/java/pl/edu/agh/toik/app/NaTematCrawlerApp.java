@@ -8,6 +8,6 @@ public class NaTematCrawlerApp {
     public static void main(String[] args) throws Exception {
         ApplicationContext context = new AnnotationConfigApplicationContext(NaTematCrawlerConfig.class);
         NaTematCrawler naTematCrawler = context.getBean(NaTematCrawler.class);
-        naTematCrawler.startCrawler("http://natemat.pl/");
+        naTematCrawler.crawl("http://natemat.pl/");
     }
 }

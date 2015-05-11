@@ -30,7 +30,7 @@ public class NaTematCrawler implements ICrawler {
     }
 
     @Override
-    public void startCrawler(String url) throws IOException {
+    public void crawl(String url) throws IOException {
         Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
 
         Set<Element> links = crawlerService.findUniqueLinks(doc.select("a[href^=" + url + "], a[href^=/]"));
