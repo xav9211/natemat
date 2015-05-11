@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "articles", uniqueConstraints = @UniqueConstraint(columnNames = {"url"}))
@@ -20,6 +21,9 @@ public class Article {
     private DateTime createdDate;
     @Column(columnDefinition = "TEXT")
     private String text;
+
+    @OneToMany(mappedBy = "article")
+    private Set<Comment> comments;
 
     public Article() {
     }
@@ -78,5 +82,13 @@ public class Article {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }

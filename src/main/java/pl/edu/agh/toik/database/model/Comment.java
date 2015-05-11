@@ -19,6 +19,10 @@ public class Comment {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "articleId")
+    private Article article;
+
     public Comment() {
     }
 
@@ -70,4 +74,11 @@ public class Comment {
         this.content = content;
     }
 
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
 }
