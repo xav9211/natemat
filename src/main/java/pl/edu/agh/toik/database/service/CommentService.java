@@ -13,8 +13,8 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public List<Comment> findAllComments() {
-        return commentRepository.findAllComments();
+    public Iterable<Comment> findAllComments() {
+        return commentRepository.findAll();
     }
 
     public void saveComment(Comment comment) {
