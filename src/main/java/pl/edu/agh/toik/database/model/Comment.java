@@ -4,6 +4,8 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "comments")
@@ -22,6 +24,13 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "articleId")
     private Article article;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "commentId")
+    private Comment comment;
+
+    @OneToMany(mappedBy = "comment")
+    private Set<Comment> subComments = new LinkedHashSet<Comment>();
 
     public Comment() {
     }
@@ -80,5 +89,21 @@ public class Comment {
 
     public void setArticle(Article article) {
         this.article = article;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
+    }
+
+    public Set<Comment> getSubComments() {
+        return subComments;
+    }
+
+    public void setSubComments(Set<Comment> subComments) {
+        this.subComments = subComments;
     }
 }
