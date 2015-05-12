@@ -91,7 +91,7 @@ public class PersistenceConfig {
         LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         localContainerEntityManagerFactoryBean.setDataSource(dataSource());
         localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
-        localContainerEntityManagerFactoryBean.setPackagesToScan("main.java.pl.edu.agh.toik.database");
+        localContainerEntityManagerFactoryBean.setPackagesToScan(env.getProperty("packagesToScan"));
         localContainerEntityManagerFactoryBean.setJpaProperties(hibernateProperties());
         return localContainerEntityManagerFactoryBean;
     }

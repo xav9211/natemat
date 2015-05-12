@@ -1,10 +1,11 @@
 package main.java.pl.edu.agh.toik.database.model;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -29,8 +30,9 @@ public class Comment {
     @JoinColumn(name = "commentId")
     private Comment comment;
 
+    @NotFound(action = NotFoundAction.IGNORE)
     @OneToMany(mappedBy = "comment")
-    private Set<Comment> subComments = new LinkedHashSet<Comment>();
+    private Set<Comment> subComments;
 
     public Comment() {
     }

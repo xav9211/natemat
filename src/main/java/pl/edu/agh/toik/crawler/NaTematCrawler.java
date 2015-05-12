@@ -1,6 +1,7 @@
 package main.java.pl.edu.agh.toik.crawler;
 
 import main.java.pl.edu.agh.toik.database.NaTematCrawlerDB;
+import main.java.pl.edu.agh.toik.database.model.Comment;
 import main.java.pl.edu.agh.toik.database.service.CommentService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -44,7 +46,16 @@ public class NaTematCrawler implements ICrawler {
             System.out.println("Number of comments: " + crawlerService.getNumberOfCommentsForUrl(subUrl));
             System.out.println("Number of links: " + crawlerService.findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
 
-            naTematCrawlerDB.getCommentService().saveComments(crawlerService.getCommentsForUrl(subUrl));
+            List<Comment> commentsList = crawlerService.getCommentsForUrl(subUrl);
+
+            naTematCrawlerDB.getCommentService().saveComments(commentsList);
+
+            for (Comment comment : commentsList) {
+                Set<Comment> subCommentsList = crawlerService.getSubCommentsForCommentId(comment.getId());
+                System.out.println("For commentId: " + comment.getId());
+                System.out.println("Number of subComments: " + subCommentsList.size());
+                naTematCrawlerDB.getCommentService().saveSubCommentsForComment(comment, subCommentsList);
+            }
         }
     }
 }

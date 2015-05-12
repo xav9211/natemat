@@ -50,6 +50,28 @@ public class NaTematCrawlerService implements ICrawlerService {
     }
 
     @Override
+    public Set<Comment> getSubCommentsForCommentId(String commentId) throws IOException {
+
+        Set<Comment> subComments = new LinkedHashSet<Comment>();
+
+        JSONObject json = JsonReader.readJsonFromUrl("http://graph.facebook.com/" + commentId + "/comments");
+        JSONArray data = json.getJSONArray("data");
+
+        for (int i = 0; i < data.length(); ++i) {
+            String subCommentId = data.getJSONObject(i).getString("id");
+            String subCommentAuthor = data.getJSONObject(i).getJSONObject("from").getString("name");
+            DateTime subCommentCreatedDate = DateTime.parse(data.getJSONObject(i).getString("created_time"));
+            Integer subCommentLikeCounter = data.getJSONObject(i).getInt("like_count");
+            String subCommentContent = data.getJSONObject(i).getString("message");
+
+            Comment subComment = new Comment(subCommentId, subCommentAuthor, subCommentCreatedDate, subCommentLikeCounter, subCommentContent);
+            subComments.add(subComment);
+        }
+
+        return subComments;
+    }
+
+    @Override
     public int getNumberOfCommentsForUrl(String url) throws IOException {
         JSONObject json1 = JsonReader.readJsonFromUrl("http://graph.facebook.com/comments?id=" + url);
         JSONArray data = json1.getJSONArray("data");
