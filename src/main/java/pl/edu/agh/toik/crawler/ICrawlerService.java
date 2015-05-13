@@ -1,6 +1,6 @@
 package main.java.pl.edu.agh.toik.crawler;
 
-import main.java.pl.edu.agh.toik.database.model.Comment;
+import main.java.pl.edu.agh.toik.database.model.*;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
@@ -13,4 +13,6 @@ public interface ICrawlerService {
     List<Comment> getCommentsForUrl(String url) throws IOException;
     Set<Comment> getSubCommentsForCommentId(String commentId) throws IOException;
     int getNumberOfCommentsForUrl(String url) throws IOException;
+    Article getArticleFromUrl(String url) throws IOException;
+
 }

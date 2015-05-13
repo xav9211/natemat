@@ -1,16 +1,20 @@
 package main.java.pl.edu.agh.toik.crawler;
 
-import main.java.pl.edu.agh.toik.database.model.Comment;
+import main.java.pl.edu.agh.toik.database.model.*;
 import main.java.pl.edu.agh.toik.util.JsonReader;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.*;
 
 public class NaTematCrawlerService implements ICrawlerService {
+
+    private final static int TIMEOUT = 10 * 1000;
 
     @Override
     public Set<Element> findUniqueLinks(Collection<Element> links) {
@@ -76,6 +80,17 @@ public class NaTematCrawlerService implements ICrawlerService {
         JSONObject json1 = JsonReader.readJsonFromUrl("http://graph.facebook.com/comments?id=" + url);
         JSONArray data = json1.getJSONArray("data");
         return data.length();
+    }
+
+    @Override
+    public Article getArticleFromUrl(String url) throws IOException{
+        Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+        String author = doc.select("div.author-label").first().text();
+        String dateStr = doc.select("span.date").first().attr("title");
+        String date = dateStr.split("T")[0];
+        String time = dateStr.split("T")[1];
+        DateTime artDate = new DateTime(Integer.parseInt(date.split("-")[0]), Integer.parseInt(date.split("-")[1]), Integer.parseInt(date.split("-")[2]), Integer.parseInt(time.split(":")[0]), Integer.parseInt(time.split(":")[1]));
+        return new Article(url, author, doc.title(), artDate, doc.text());
     }
 
 }
