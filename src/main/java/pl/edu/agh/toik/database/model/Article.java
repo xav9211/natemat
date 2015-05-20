@@ -7,13 +7,11 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "articles", uniqueConstraints = @UniqueConstraint(columnNames = {"url"}))
+@Table(name = "articles")
 public class Article {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-    private String url;
+    private String urlId;
     private String author;
     private String title;
     @Column
@@ -28,28 +26,20 @@ public class Article {
     public Article() {
     }
 
-    public Article(String url, String author, String title, DateTime createdDate, String text) {
-        this.url = url;
+    public Article(String urlId, String author, String title, DateTime createdDate, String text) {
+        this.urlId = urlId;
         this.author = author;
         this.title = title;
         this.createdDate = createdDate;
         this.text = text;
     }
 
-    public Integer getId() {
-        return id;
+    public String getUrlId() {
+        return urlId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrlId(String urlId) {
+        this.urlId = urlId;
     }
 
     public String getAuthor() {

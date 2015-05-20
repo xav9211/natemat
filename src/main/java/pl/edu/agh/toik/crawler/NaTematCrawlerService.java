@@ -83,7 +83,9 @@ public class NaTematCrawlerService implements ICrawlerService {
     }
 
     @Override
-    public Article getArticleFromUrl(String url) throws IOException{
+    public Article getArticleFromUrl(String url) throws IOException {
+        if (url.equals("http://natemat.pl/") || url.matches("http://natemat.pl/c/.*") || url.matches("http://natemat.pl/t/.*"))
+            return null;
         Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
         String author = doc.select("div.author-label").first().text();
         String dateStr = doc.select("span.date").first().attr("title");
