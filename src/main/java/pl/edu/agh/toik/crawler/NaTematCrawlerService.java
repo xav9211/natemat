@@ -88,7 +88,7 @@ public class NaTematCrawlerService implements ICrawlerService {
                 url.matches("http://natemat.pl/c/.*") ||
                 url.matches("http://natemat.pl/t/.*") ||
                 url.matches("http://natemat.pl/info/.*") ||
-                url.matches("http://natemat.pl/posts-map"))
+                url.matches("http://natemat.pl/posts-map/.*"))
             return null;
         Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
         String author = doc.select("div.author-label").first().text();
