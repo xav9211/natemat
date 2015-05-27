@@ -3,11 +3,9 @@ package main.java.pl.edu.agh.toik.crawler;
 import main.java.pl.edu.agh.toik.database.NaTematCrawlerDB;
 import main.java.pl.edu.agh.toik.database.model.Article;
 import main.java.pl.edu.agh.toik.database.model.Comment;
-import main.java.pl.edu.agh.toik.database.service.CommentService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,8 +48,10 @@ public class NaTematCrawler implements ICrawler {
             Article article = crawlerService.getArticleFromUrl(subUrl);
             List<Comment> commentsList = crawlerService.getCommentsForUrl(subUrl);
 
-            if (article != null)
+            if (article != null) {
                 naTematCrawlerDB.getArticleService().saveArticle(article);
+                System.out.println("Number of facebook shares: " + article.getFacebookShares());
+            }
 
             naTematCrawlerDB.getCommentService().saveComments(commentsList);
 

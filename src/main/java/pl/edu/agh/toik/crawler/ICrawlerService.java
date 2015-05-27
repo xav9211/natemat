@@ -14,5 +14,5 @@ public interface ICrawlerService {
     Set<Comment> getSubCommentsForCommentId(String commentId) throws IOException;
     int getNumberOfCommentsForUrl(String url) throws IOException;
     Article getArticleFromUrl(String url) throws IOException;
-
+    int getNumberOfFacebookSharesForArticle(String articleUrl) throws IOException;
 }

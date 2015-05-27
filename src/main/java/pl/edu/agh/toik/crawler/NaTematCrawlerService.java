@@ -83,6 +83,14 @@ public class NaTematCrawlerService implements ICrawlerService {
     }
 
     @Override
+    public int getNumberOfFacebookSharesForArticle(String articleUrl) throws IOException {
+        JSONObject json = JsonReader.readJsonFromUrl("http://graph.facebook.com/" + articleUrl);
+        if (json.has("shares"))
+            return json.getInt("shares");
+        return 0;
+    }
+
+    @Override
     public Article getArticleFromUrl(String url) throws IOException {
         if (url.equals("http://natemat.pl/") ||
                 url.matches("http://natemat.pl/c/.*") ||
@@ -96,7 +104,8 @@ public class NaTematCrawlerService implements ICrawlerService {
         String date = dateStr.split("T")[0];
         String time = dateStr.split("T")[1];
         DateTime artDate = new DateTime(Integer.parseInt(date.split("-")[0]), Integer.parseInt(date.split("-")[1]), Integer.parseInt(date.split("-")[2]), Integer.parseInt(time.split(":")[0]), Integer.parseInt(time.split(":")[1]));
-        return new Article(url, author, doc.title(), artDate, doc.text());
+        Integer numberOfFacebookShares = getNumberOfFacebookSharesForArticle(url);
+        return new Article(url, author, doc.title(), artDate, doc.text(), numberOfFacebookShares);
     }
 
 }
