@@ -3,6 +3,7 @@ package main.java.pl.edu.agh.toik.crawler;
 import main.java.pl.edu.agh.toik.database.NaTematCrawlerDB;
 import main.java.pl.edu.agh.toik.database.model.Article;
 import main.java.pl.edu.agh.toik.database.model.Comment;
+import main.java.pl.edu.agh.toik.mail_notification.NaTematCrawlerMailNotification;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +27,9 @@ public class NaTematCrawler implements ICrawler {
     private NaTematCrawlerDB naTematCrawlerDB;
 
     @Autowired
+    private NaTematCrawlerMailNotification naTematCrawlerMailNotification;
+
+    @Autowired
     public NaTematCrawler(ICrawlerService crawlerService, ICrawlerSettings crawlerSettings) {
         this.crawlerService = crawlerService;
         this.crawlerSettings = crawlerSettings;
@@ -32,6 +37,9 @@ public class NaTematCrawler implements ICrawler {
 
     @Override
     public void crawl(String url) throws IOException {
+
+        naTematCrawlerMailNotification.getMailNotificationService().sendMailNotification("YOUR_EMAIL", "NaTematCrawler started", "Crawler started at: " + new Date());
+
         Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
 
         Set<Element> links = crawlerService.findUniqueLinks(doc.select("a[href^=" + url + "], a[href^=/]"));

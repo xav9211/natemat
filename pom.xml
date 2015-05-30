@@ -67,6 +67,11 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>1.4.1.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
         <!-- Json -->
         <dependency>
             <groupId>org.json</groupId>
@@ -122,6 +127,12 @@
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
             <version>3.1.0.CR11</version>
+        </dependency>
+        <!-- Java mail API -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
         </dependency>
 
     </dependencies>
