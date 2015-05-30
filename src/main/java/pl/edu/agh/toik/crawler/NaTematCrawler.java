@@ -38,7 +38,7 @@ public class NaTematCrawler implements ICrawler {
     @Override
     public void crawl(String url) throws IOException {
 
-        naTematCrawlerMailNotification.getMailNotificationService().sendMailNotification("YOUR_EMAIL", "NaTematCrawler started", "Crawler started at: " + new Date());
+        //naTematCrawlerMailNotification.getMailNotificationService().sendMailNotification("YOUR_EMAIL", "NaTematCrawler started", "Crawler started at: " + new Date());
 
         Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
 
