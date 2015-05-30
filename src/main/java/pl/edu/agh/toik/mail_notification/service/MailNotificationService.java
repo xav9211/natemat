@@ -14,7 +14,6 @@ public class MailNotificationService {
     public void sendMailNotification(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom("me@natematcrawler.com");
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
