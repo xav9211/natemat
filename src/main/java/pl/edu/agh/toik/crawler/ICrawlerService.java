@@ -16,5 +16,5 @@ public interface ICrawlerService {
     Article getArticleFromUrl(String url) throws IOException;
     Set<String> getAllBlogsLinks() throws IOException;
     Set<String> getAllArticlesLinks() throws IOException;
-
+    int getNumberOfFacebookSharesForArticle(String articleUrl) throws IOException;
 }

@@ -7,13 +7,11 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "articles", uniqueConstraints = @UniqueConstraint(columnNames = {"url"}))
+@Table(name = "articles")
 public class Article {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-    private String url;
+    private String urlId;
     private String author;
     private String title;
     @Column
@@ -21,6 +19,7 @@ public class Article {
     private DateTime createdDate;
     @Column(columnDefinition = "TEXT")
     private String text;
+    private Integer facebookShares;
 
     @OneToMany(mappedBy = "article")
     private Set<Comment> comments;
@@ -28,28 +27,21 @@ public class Article {
     public Article() {
     }
 
-    public Article(String url, String author, String title, DateTime createdDate, String text) {
-        this.url = url;
+    public Article(String urlId, String author, String title, DateTime createdDate, String text, Integer facebookShares) {
+        this.urlId = urlId;
         this.author = author;
         this.title = title;
         this.createdDate = createdDate;
         this.text = text;
+        this.facebookShares = facebookShares;
     }
 
-    public Integer getId() {
-        return id;
+    public String getUrlId() {
+        return urlId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUrlId(String urlId) {
+        this.urlId = urlId;
     }
 
     public String getAuthor() {
@@ -82,6 +74,14 @@ public class Article {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Integer getFacebookShares() {
+        return facebookShares;
+    }
+
+    public void setFacebookShares(Integer facebookShares) {
+        this.facebookShares = facebookShares;
     }
 
     public Set<Comment> getComments() {
