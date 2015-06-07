@@ -93,4 +93,56 @@ public class NaTematCrawlerService implements ICrawlerService {
         return new Article(url, author, doc.title(), artDate, doc.text());
     }
 
+    @Override
+    public Set<String> getAllBlogsLinks() throws IOException{
+        String url = "http://natemat.pl/blogs/";
+        Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+
+        Set<Element> links = this.findUniqueLinks(doc.select("a.blog-name"));
+        Set<String> allLinks = new HashSet<String>();
+
+        for (Element link : links) {
+            String subUrl = link.attr("abs:href");
+            Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
+            Set<Element> tmpLinks = this.findUniqueLinks(tmpDoc.select("h3 a[href]"));
+            for(Element subLink : tmpLinks){
+                String sub2Url = subLink.attr("abs:href");
+                allLinks.add(sub2Url);
+            }
+        }
+        return allLinks;
+    }
+
+    @Override
+    public Set<String> getAllArticlesLinks() throws IOException{
+        String url = "http://natemat.pl/posts-map/";
+        Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+
+        Set<Element> links = this.findUniqueLinks(doc.select("div#main a[href]"));
+        Set<String> allLinks = new HashSet<String>();
+
+        for (Element link : links) {
+            String subUrl = link.attr("abs:href");
+            Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
+            Set<Element> tmpLinks = this.findUniqueLinks(tmpDoc.select("a.pg_page"));
+            if(!tmpLinks.isEmpty()) {
+                for (Element subLink : tmpLinks) {
+                    String sub2Url = subLink.attr("abs:href");
+                    Document tmpDoc2 = Jsoup.connect(sub2Url).timeout(TIMEOUT).get();
+                    Set<Element> tmp2Links = this.findUniqueLinks(tmpDoc2.select("div#main ul a[href]"));
+                    for (Element sub2Link : tmp2Links) {
+                        String sub3Url = sub2Link.attr("abs:href");
+                        allLinks.add(sub3Url);
+                    }
+                }
+            }else{
+                tmpLinks = this.findUniqueLinks(tmpDoc.select("div#main ul a[href]"));
+                for (Element subLink : tmpLinks) {
+                    String sub2Url = subLink.attr("abs:href");
+                    allLinks.add(sub2Url);
+                }
+            }
+        }
+        return allLinks;
+    }
 }
