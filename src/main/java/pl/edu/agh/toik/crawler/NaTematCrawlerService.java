@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.*;
@@ -158,6 +159,72 @@ public class NaTematCrawlerService implements ICrawlerService {
                 }
             }
         }
+        return allLinks;
+    }
+
+    @Override
+    public List<String> getAllSectionsList() throws IOException{
+        String url = "http://natemat.pl/posts-map/";
+        Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+
+        Elements links = doc.select("div#main h2");
+        List<String> sections = new ArrayList<String>();
+
+        for(Element element : links){
+            sections.add(element.text());
+        }
+        return sections;
+    }
+
+    @Override
+    public List<LinkMap> getLinksFromSection(String section) throws IOException{
+        String url = "http://natemat.pl/posts-map/";
+        Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+
+        Element element = doc.select("div#main").first();
+        List<LinkMap> links = new ArrayList<LinkMap>();
+
+        boolean save = false;
+        for (Element child : element.children()){
+            if (child.tag().toString().equals("h2")){
+                if(child.text().equals(section)){
+                    save = true;
+                }else if (save) break;
+            }else if (child.tag().toString().equals("a") && save) {
+                LinkMap elem = new LinkMap(child.text(), child.attr("abs:href"));
+                links.add(elem);
+            }
+        }
+
+        return links;
+    }
+
+    @Override
+    public List<LinkMap> getLinksFromMonth(LinkMap month) throws IOException{
+        String url = month.getLink();
+        Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+
+        List<LinkMap> allLinks = new ArrayList<LinkMap>();
+
+        Set<Element> links = this.findUniqueLinks(doc.select("div#main a.pg_page"));
+        if(!links.isEmpty()) {
+            for (Element subLink : links) {
+                String subUrl = subLink.attr("abs:href");
+                Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
+                Set<Element> tmp2Links = this.findUniqueLinks(tmpDoc.select("div#main ul a[href]"));
+                for (Element sub2Link : tmp2Links) {
+                    LinkMap sub2Url = new LinkMap(sub2Link.text(), sub2Link.attr("abs:href"));
+                    allLinks.add(sub2Url);
+                }
+            }
+        }else{
+            links = this.findUniqueLinks(doc.select("div#main ul a[href]"));
+            for (Element subLink : links) {
+                LinkMap subUrl = new LinkMap(subLink.text(), subLink.attr("abs:href"));
+                allLinks.add(subUrl);
+            }
+        }
+
         return allLinks;
     }
 }
