@@ -40,21 +40,18 @@ public class NaTematCrawler implements ICrawler {
 
         //naTematCrawlerMailNotification.getMailNotificationService().sendMailNotification("YOUR_EMAIL", "NaTematCrawler started", "Crawler started at: " + new Date());
 
-        Document doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+        Set<String> allArticlesLinks = crawlerService.getAllArticlesLinks();
 
-        Set<Element> links = crawlerService.findUniqueLinks(doc.select("a[href^=" + url + "], a[href^=/]"));
-
-        for (Element link : links) {
-            String subUrl = link.attr("abs:href");
-            Document tmpDoc = Jsoup.connect(subUrl).timeout(TIMEOUT).get();
-            System.out.println("URL: " + subUrl);
+        for (String articleLink : allArticlesLinks) {
+            Document tmpDoc = Jsoup.connect(articleLink).timeout(TIMEOUT).get();
+            System.out.println("URL: " + articleLink);
             System.out.println("Text length: " + tmpDoc.text().length());
             System.out.println("Html length: " + tmpDoc.html().length());
-            System.out.println("Number of comments: " + crawlerService.getNumberOfCommentsForUrl(subUrl));
+            System.out.println("Number of comments: " + crawlerService.getNumberOfCommentsForUrl(articleLink));
             System.out.println("Number of links: " + crawlerService.findUniqueLinks(tmpDoc.select("a[href^=" + url + "], a[href^=/]")).size());
 
-            Article article = crawlerService.getArticleFromUrl(subUrl);
-            List<Comment> commentsList = crawlerService.getCommentsForUrl(subUrl);
+            Article article = crawlerService.getArticleFromUrl(articleLink);
+            List<Comment> commentsList = crawlerService.getCommentsForUrl(articleLink);
 
             if (article != null) {
                 naTematCrawlerDB.getArticleService().saveArticle(article);
