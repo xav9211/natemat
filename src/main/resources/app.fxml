@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+   <children>
+      <Button fx:id="downloadButton" layoutX="15.0" layoutY="20.0" mnemonicParsing="false" onAction="#downloadAction" prefHeight="47.0" prefWidth="150.0" text="Pobierz artykuły" />
+      <Button fx:id="readButton" layoutX="15.0" layoutY="80.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="150.0" text="Wczytaj artykuły" />
+      <Label layoutX="15.0" layoutY="177.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz dział" />
+      <ComboBox fx:id="sectionCombo" layoutX="15.0" layoutY="192.0" onAction="#getFromSection" prefWidth="150.0" />
+      <Label layoutX="15.0" layoutY="235.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz Miesiąc" />
+      <ComboBox fx:id="monthCombo" layoutX="15.0" layoutY="250.0" onAction="#getFromMonth" prefWidth="150.0" />
+      <Label layoutX="15.0" layoutY="291.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz artykuł" />
+      <ComboBox fx:id="articleCombo" layoutX="15.0" layoutY="306.0" onAction="#getFromArticle" prefWidth="150.0" />
+      <Button fx:id="actualizeButton" layoutX="15.0" layoutY="545.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="150.0" text="Aktualizuj BD" />
+      <TextArea fx:id="dataArea" layoutX="190.0" layoutY="20.0" prefHeight="215.0" prefWidth="510.0" />
+      <TextArea fx:id="textArea" layoutX="190.0" layoutY="250.0" prefHeight="335.0" prefWidth="510.0" />
+   </children>
+</AnchorPane>
