@@ -15,6 +15,10 @@ public class SectionService {
         return sectionRepository.findAll();
     }
 
+    public Section findBySectionName(String sectionName) {
+        return sectionRepository.findOne(sectionName);
+    }
+
     public void saveSection(Section section) {
         sectionRepository.save(section);
     }

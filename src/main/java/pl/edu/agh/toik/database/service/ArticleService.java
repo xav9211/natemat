@@ -22,6 +22,10 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
+    public Article findByUrlId(String urlId) {
+        return articleRepository.findOne(urlId);
+    }
+
     public void saveArticle(Article article) {
         articleRepository.save(article);
     }
@@ -46,4 +50,19 @@ public class ArticleService {
         }
     }
 
+    public List<Article> findArticlesBySection(Section section) {
+        return articleRepository.findBySection(section);
+    }
+
+    public List<Article> findArticlesBySectionName(String sectionName) {
+        return articleRepository.findBySectionName(sectionName);
+    }
+
+    /**
+     *
+     * @param date for example: '2015-05-20'
+     */
+    public List<Article> findArticlesByCreatedDate(String date) {
+        return articleRepository.findByCreatedDate(date);
+    }
 }
