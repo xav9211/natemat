@@ -23,6 +23,9 @@ public class Article {
 
     @OneToMany(mappedBy = "article")
     private Set<Comment> comments;
+    @ManyToOne
+    @JoinColumn(name = "sectionId")
+    private Section section;
 
     public Article() {
     }
@@ -90,5 +93,13 @@ public class Article {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ArticleService {
@@ -34,6 +35,14 @@ public class ArticleService {
         for (Comment comment : comments) {
             comment.setArticle(article);
             commentRepository.save(comment);
+        }
+    }
+
+    @Transactional
+    public void saveArticlesForSection(Section section, Iterable<Article> articles) {
+        for (Article article : articles) {
+            article.setSection(section);
+            articleRepository.save(article);
         }
     }
 
