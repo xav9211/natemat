@@ -1,4 +1,4 @@
-package controller;
+package main.java.pl.edu.agh.toik.gui.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
