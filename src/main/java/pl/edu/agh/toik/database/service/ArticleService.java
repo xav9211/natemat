@@ -90,4 +90,9 @@ public class ArticleService {
     public List<Article> findArticlesBySectionNameAndBetweenTwoCreatedDates(String sectionName, String date1, String date2) {
         return articleRepository.findBySectionNameAndBetweenTwoCreatedDates(sectionName, date1, date2);
     }
+
+    public List<Article> findArticlesInFacebookSharePeriod(Integer from, Integer to) {
+        return articleRepository.findInFacebookSharePeriod(from, to);
+    }
+
 }

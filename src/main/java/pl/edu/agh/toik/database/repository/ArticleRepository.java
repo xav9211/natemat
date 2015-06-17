@@ -26,4 +26,7 @@ public interface ArticleRepository extends CrudRepository<Article, String> {
     @Query(value = "select * from articles where sectionid = ?1 and cast(createddate as text) between ?2 and ?3", nativeQuery = true)
     List<Article> findBySectionNameAndBetweenTwoCreatedDates(String sectionName, String date1, String date2);
 
+    @Query(value = "select * from articles where facebookshares >= ?1 and facebookshares <= ?2", nativeQuery = true)
+    List<Article> findInFacebookSharePeriod(Integer from, Integer to);
+
 }
