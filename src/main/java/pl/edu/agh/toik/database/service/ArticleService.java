@@ -60,9 +60,35 @@ public class ArticleService {
 
     /**
      *
-     * @param date for example: '2015-05-20'
+     * @param date for example: '2015-05-20' or '2015-05' or '2015'
      */
     public List<Article> findArticlesByCreatedDate(String date) {
         return articleRepository.findByCreatedDate(date);
+    }
+
+    /**
+     *
+     * @param date for example: '2015-05-20' or '2015-05' or '2015'
+     */
+    public List<Article> findArticlesBySectionNameAndCreatedDate(String sectionName, String date) {
+        return articleRepository.findBySectionNameAndCreatedDate(sectionName, date);
+    }
+
+    /**
+     *
+     * @param date1 for example: '2015-05-20' or '2015-05' or '2015'
+     * @param date2 for example: '2015-05-20' or '2015-05' or '2015'
+     */
+    public List<Article> findArticlesBetweenTwoCreatedDates(String date1, String date2) {
+        return articleRepository.findBetweenTwoCreatedDates(date1, date2);
+    }
+
+    /**
+     *
+     * @param date1 for example: '2015-05-20' or '2015-05' or '2015'
+     * @param date2 for example: '2015-05-20' or '2015-05' or '2015'
+     */
+    public List<Article> findArticlesBySectionNameAndBetweenTwoCreatedDates(String sectionName, String date1, String date2) {
+        return articleRepository.findBySectionNameAndBetweenTwoCreatedDates(sectionName, date1, date2);
     }
 }
