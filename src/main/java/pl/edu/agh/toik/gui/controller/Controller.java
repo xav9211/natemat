@@ -16,16 +16,25 @@ import java.util.ResourceBundle;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import main.java.pl.edu.agh.toik.app.NaTematCrawlerConfig;
+import main.java.pl.edu.agh.toik.crawler.ICrawlerService;
+import main.java.pl.edu.agh.toik.crawler.NaTematCrawler;
 import main.java.pl.edu.agh.toik.crawler.NaTematCrawlerService;
 import main.java.pl.edu.agh.toik.crawler.LinkMap;
+import main.java.pl.edu.agh.toik.database.NaTematCrawlerDB;
 import main.java.pl.edu.agh.toik.database.model.Article;
+import main.java.pl.edu.agh.toik.mail_notification.NaTematCrawlerMailNotification;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-/**
- * Created by xav92 on 14.06.15.
- */
-public class Controller implements Initializable{
+public class Controller implements Initializable {
 
-    private NaTematCrawlerService crawler;
+    private ICrawlerService crawler;
+    //komponent bazodanowy
+    private NaTematCrawlerDB naTematCrawlerDB;
+    //komponent notyfikujacy
+    private NaTematCrawlerMailNotification naTematCrawlerMailNotification;
+
     private ObservableList<String> sections;
     private ObservableList<String> months;
     private ObservableList<String> articles;
@@ -51,7 +60,11 @@ public class Controller implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        crawler = new NaTematCrawlerService();
+        ApplicationContext context = new AnnotationConfigApplicationContext(NaTematCrawlerConfig.class);
+        NaTematCrawler naTematCrawler = context.getBean(NaTematCrawler.class);
+        crawler = naTematCrawler.getCrawlerService();
+        naTematCrawlerDB = naTematCrawler.getNaTematCrawlerDB();
+        naTematCrawlerMailNotification = naTematCrawler.getNaTematCrawlerMailNotification();
     }
 
     @FXML

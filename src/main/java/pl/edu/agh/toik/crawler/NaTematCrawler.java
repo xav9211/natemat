@@ -33,6 +33,22 @@ public class NaTematCrawler implements ICrawler {
         this.crawlerSettings = crawlerSettings;
     }
 
+    public ICrawlerSettings getCrawlerSettings() {
+        return crawlerSettings;
+    }
+
+    public ICrawlerService getCrawlerService() {
+        return crawlerService;
+    }
+
+    public NaTematCrawlerDB getNaTematCrawlerDB() {
+        return naTematCrawlerDB;
+    }
+
+    public NaTematCrawlerMailNotification getNaTematCrawlerMailNotification() {
+        return naTematCrawlerMailNotification;
+    }
+
     @Override
     public void crawl(String url) {
 
