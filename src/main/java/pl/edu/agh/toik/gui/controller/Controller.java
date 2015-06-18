@@ -3,7 +3,6 @@ package main.java.pl.edu.agh.toik.gui.controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -249,6 +248,17 @@ public class Controller implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if (chk.getText().equals("Wczytaj artykuły")) {
+            this.histogram.getData().clear();
+            List<Integer> linksInSection = new ArrayList<Integer>();
+            for(String sect : this.sections) {
+                linksInSection.add(this.naTematCrawlerDB.getArticleService().findArticlesBySectionName(sect).size());
+            }
+            XYChart.Series<String, Integer> series = new XYChart.Series<>();
+            for (int i = 0; i < linksInSection.size(); i++){
+                series.getData().add(new XYChart.Data<>(this.sections.get(i), linksInSection.get(i)));
+            }
+            this.histogram.getData().add(series);
         }
     }
 
@@ -256,21 +266,15 @@ public class Controller implements Initializable {
     private void actualizeAction(ActionEvent event){
         try {
             List<String> list = this.crawler.getAllSectionsList();
-//            List<Article> artcls = this.naTematCrawlerDB.getArticleService().findArticlesByCreatedDate("2015");
             Iterable<Section> sects = new ArrayList<Section>();
             for(String l: list){
                 Section sect = new Section(l);
                 this.sectionService.saveSection(sect);
                 this.monthsL = this.crawler.getLinksFromSection(l);
-//                for (Article article : artcls) {
-//                    article.setSection(sect);
-//                    naTematCrawlerDB.getArticleService().saveArticle(article);
-//                }
                 for (String link : this.crawler.getNames(this.monthsL)) {
                     this.articlesL = this.crawler.getLinksFromMonth(this.crawler.getLinkFromName(link, this.monthsL));
                     for (String n: this.crawler.getNames(this.articlesL)){
                         Article art = this.crawler.getArticleFromUrl(this.crawler.getLinkFromName(n, this.articlesL));
-                        System.out.println(art.getFacebookShares());
                         art.setSection(sect);
                         this.naTematCrawlerDB.getArticleService().saveArticle(art);
                     }
