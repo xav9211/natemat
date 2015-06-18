@@ -1,4 +1,4 @@
-package main.java.pl.edu.agh.toik.app;
+package main.java.pl.edu.agh.sius.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

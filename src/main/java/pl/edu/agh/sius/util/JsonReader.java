@@ -1,4 +1,4 @@
-package main.java.pl.edu.agh.toik.util;
+package main.java.pl.edu.agh.sius.util;
 
 import org.json.JSONException;
 import org.json.JSONObject;

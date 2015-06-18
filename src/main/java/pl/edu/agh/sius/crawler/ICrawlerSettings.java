@@ -1,4 +1,4 @@
-package main.java.pl.edu.agh.toik.crawler;
+package main.java.pl.edu.agh.sius.crawler;
 
 public interface ICrawlerSettings {
     String getStorageFolder();

@@ -1,15 +1,12 @@
-package main.java.pl.edu.agh.toik.crawler;
+package main.java.pl.edu.agh.sius.crawler;
 
-import main.java.pl.edu.agh.toik.database.NaTematCrawlerDB;
-import main.java.pl.edu.agh.toik.database.model.Article;
-import main.java.pl.edu.agh.toik.database.model.Comment;
-import main.java.pl.edu.agh.toik.mail_notification.NaTematCrawlerMailNotification;
+import main.java.pl.edu.agh.sius.model.Article;
+import main.java.pl.edu.agh.sius.model.Comment;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -20,12 +17,6 @@ public class NaTematCrawler implements ICrawler {
 
     private ICrawlerService crawlerService;
     private ICrawlerSettings crawlerSettings;
-
-    @Autowired
-    private NaTematCrawlerDB naTematCrawlerDB;
-
-    @Autowired
-    private NaTematCrawlerMailNotification naTematCrawlerMailNotification;
 
     @Autowired
     public NaTematCrawler(ICrawlerService crawlerService, ICrawlerSettings crawlerSettings) {
@@ -39,14 +30,6 @@ public class NaTematCrawler implements ICrawler {
 
     public ICrawlerService getCrawlerService() {
         return crawlerService;
-    }
-
-    public NaTematCrawlerDB getNaTematCrawlerDB() {
-        return naTematCrawlerDB;
-    }
-
-    public NaTematCrawlerMailNotification getNaTematCrawlerMailNotification() {
-        return naTematCrawlerMailNotification;
     }
 
     @Override
@@ -68,23 +51,6 @@ public class NaTematCrawler implements ICrawler {
 
                 Article article = crawlerService.getArticleFromUrl(articleLink);
                 List<Comment> commentsList = crawlerService.getCommentsForUrl(articleLink);
-
-                if (article != null) {
-                    naTematCrawlerDB.getArticleService().saveArticle(article);
-                    System.out.println("Number of facebook shares: " + article.getFacebookShares());
-                }
-
-                naTematCrawlerDB.getCommentService().saveComments(commentsList);
-
-                if (article != null && !commentsList.isEmpty())
-                    naTematCrawlerDB.getArticleService().saveCommentsForArticle(article, commentsList);
-
-                for (Comment comment : commentsList) {
-                    Set<Comment> subCommentsList = crawlerService.getSubCommentsForCommentId(comment.getId());
-                    System.out.println("For commentId: " + comment.getId());
-                    System.out.println("Number of subComments: " + subCommentsList.size());
-                    naTematCrawlerDB.getCommentService().saveSubCommentsForComment(comment, subCommentsList);
-                }
             }
             //naTematCrawlerMailNotification.getMailNotificationService().sendMailNotification("YOUR_EMAIL", "NaTematCrawler finished", "Crawler stopped at: " + new Date());
         } catch (Exception e) {

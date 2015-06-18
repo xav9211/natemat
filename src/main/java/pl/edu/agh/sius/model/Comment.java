@@ -1,4 +1,4 @@
-package main.java.pl.edu.agh.toik.database.model;
+package main.java.pl.edu.agh.sius.model;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;

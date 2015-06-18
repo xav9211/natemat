@@ -1,6 +1,6 @@
-package main.java.pl.edu.agh.toik.crawler;
+package main.java.pl.edu.agh.sius.crawler;
 
-import main.java.pl.edu.agh.toik.database.model.*;
+import main.java.pl.edu.agh.sius.model.*;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
@@ -14,8 +14,6 @@ public interface ICrawlerService {
     Set<Comment> getSubCommentsForCommentId(String commentId) throws IOException;
     int getNumberOfCommentsForUrl(String url) throws IOException;
     Article getArticleFromUrl(String url) throws IOException;
-    Set<String> getAllBlogsLinks() throws IOException;
-    Set<String> getAllArticlesLinks() throws IOException;
     int getNumberOfFacebookSharesForArticle(String articleUrl) throws IOException;
     List<String> getAllSectionsList() throws IOException;
     List<LinkMap> getLinksFromSection(String section) throws IOException;
