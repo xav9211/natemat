@@ -214,7 +214,7 @@ public class Controller implements Initializable {
         String text = this.article.getText();
         StringBuilder sb = new StringBuilder(text);
         int i = 0;
-        while ((i = sb.indexOf(" ", i + 60)) != -1) {
+        while ((i = sb.indexOf(" ", i + 120)) != -1) {
             sb.replace(i, i + 1, "\n");
         }
         this.textArea.setText(sb.toString());
