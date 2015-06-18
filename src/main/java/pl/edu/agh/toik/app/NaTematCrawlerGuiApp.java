@@ -12,7 +12,7 @@ public class NaTematCrawlerGuiApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("app.fxml"));
         primaryStage.setTitle("NaTemat crawler");
-        primaryStage.setScene(new Scene(root, 720, 600));
+        primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.show();
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -9,18 +10,27 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.pl.edu.agh.toik.gui.controller.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.pl.edu.agh.toik.gui.controller.Controller">
    <children>
-      <Button fx:id="downloadButton" layoutX="15.0" layoutY="20.0" mnemonicParsing="false" onAction="#downloadAction" prefHeight="47.0" prefWidth="150.0" text="Pobierz artykuły" />
-      <Button fx:id="readButton" layoutX="15.0" layoutY="80.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="150.0" text="Wczytaj artykuły" />
-      <Label layoutX="15.0" layoutY="177.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz dział" />
-      <ComboBox fx:id="sectionCombo" layoutX="15.0" layoutY="192.0" onAction="#getFromSection" prefWidth="150.0" />
-      <Label layoutX="15.0" layoutY="235.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz Miesiąc" />
-      <ComboBox fx:id="monthCombo" layoutX="15.0" layoutY="250.0" onAction="#getFromMonth" prefWidth="150.0" />
-      <Label layoutX="15.0" layoutY="291.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz artykuł" />
-      <ComboBox fx:id="articleCombo" layoutX="15.0" layoutY="306.0" onAction="#getFromArticle" prefWidth="150.0" />
-      <Button fx:id="actualizeButton" layoutX="15.0" layoutY="545.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="150.0" text="Aktualizuj BD" />
-      <TextArea fx:id="dataArea" layoutX="190.0" layoutY="20.0" prefHeight="215.0" prefWidth="510.0" />
-      <TextArea fx:id="textArea" layoutX="190.0" layoutY="250.0" prefHeight="335.0" prefWidth="510.0" />
+      <RadioButton fx:id="downloadButton" layoutX="15.0" layoutY="25.0" mnemonicParsing="false" onAction="#downloadAction" text="Pobierz artykuły" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="25.0" />
+      <RadioButton fx:id="readButton" layoutX="15.0" layoutY="55.0" mnemonicParsing="false" onAction="#readAction" text="Wczytaj artykuły" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="55.0" />
+      <Label layoutX="15.0" layoutY="177.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz dział" AnchorPane.leftAnchor="15.0" />
+      <ComboBox fx:id="sectionCombo" layoutX="15.0" layoutY="192.0" onAction="#getFromSection" prefWidth="150.0" AnchorPane.leftAnchor="15.0" />
+      <Label layoutX="15.0" layoutY="235.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz Miesiąc" AnchorPane.leftAnchor="15.0" />
+      <ComboBox fx:id="monthCombo" layoutX="15.0" layoutY="250.0" onAction="#getFromMonth" prefWidth="150.0" AnchorPane.leftAnchor="15.0" />
+      <Label layoutX="15.0" layoutY="291.0" prefHeight="15.0" prefWidth="150.0" text="Wybierz artykuł" AnchorPane.leftAnchor="15.0" />
+      <ComboBox fx:id="articleCombo" layoutX="15.0" layoutY="306.0" onAction="#getFromArticle" prefWidth="150.0" AnchorPane.leftAnchor="15.0" />
+      <Button fx:id="chartButton" layoutX="15.0" layoutY="490.0" mnemonicParsing="false" onAction="#chartAction" prefHeight="41.0" prefWidth="150.0" text="Narysuj wykres" AnchorPane.bottomAnchor="69.0" AnchorPane.leftAnchor="15.0" />
+      <Button fx:id="actualizeButton" layoutX="15.0" layoutY="545.0" mnemonicParsing="false" onAction="#actualizeAction" prefHeight="41.0" prefWidth="150.0" text="Aktualizuj BD" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
+      <TextArea fx:id="dataArea" layoutX="190.0" layoutY="20.0" prefHeight="300.0" prefWidth="400.0" AnchorPane.leftAnchor="190.0" AnchorPane.topAnchor="20.0" />
+      <BarChart fx:id="histogram" layoutX="610.0" layoutY="20.0" prefHeight="300.0" prefWidth="550.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+      <TextArea fx:id="textArea" layoutX="190.0" layoutY="250.0" prefHeight="450.0" prefWidth="510.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="190.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="335.0" />
    </children>
 </AnchorPane>
