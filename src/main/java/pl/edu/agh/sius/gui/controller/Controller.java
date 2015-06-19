@@ -29,6 +29,7 @@ public class Controller implements Initializable {
     private Article article;
     private List<LinkMap> monthsL;
     private List<LinkMap> articlesL;
+    private List<List<Integer>> sectionsList;
 
     @FXML
     private ComboBox<String> sectionCombo;
@@ -51,12 +52,23 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.crawler = new NaTematCrawlerService();
+        sectionsList = new ArrayList<List<Integer>>();
     }
 
     @FXML
     private void downloadAction(ActionEvent event){
         try {
             this.sections = FXCollections.observableArrayList(this.crawler.getAllSectionsList());
+            for (String sect : this.sections){
+                List<LinkMap> months = this.crawler.getLinksFromSection(sect);
+                List<Integer> monthsList = new ArrayList<Integer>();
+                Integer articlesListSize;
+                for (LinkMap month : months){
+                    articlesListSize = (Integer)this.crawler.getNames(this.crawler.getLinksFromMonth(month.getLink())).size();
+                    monthsList.add(articlesListSize);
+                }
+                this.sectionsList.add(monthsList);
+            }
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -76,6 +88,8 @@ public class Controller implements Initializable {
     private void getFromSection(ActionEvent event){
         try {
             if (this.sectionCombo.getSelectionModel().getSelectedItem() != null) {
+                this.dataArea.setText("");
+                this.textArea.setText("");
                 this.section = this.sectionCombo.getSelectionModel().getSelectedItem().toString();
                 this.monthsL = this.crawler.getLinksFromSection(this.section);
                 this.months = FXCollections.observableArrayList(this.crawler.getNames(this.monthsL));
@@ -93,6 +107,8 @@ public class Controller implements Initializable {
     private void getFromMonth(ActionEvent event){
         try {
             if (this.monthCombo.getSelectionModel().getSelectedItem() != null) {
+                this.dataArea.setText("");
+                this.textArea.setText("");
                 this.articlesL = this.crawler.getLinksFromMonth(this.crawler.getLinkFromName(this.monthCombo.getSelectionModel().getSelectedItem().toString(), this.monthsL));
                 this.articles = FXCollections.observableArrayList(this.crawler.getNames(this.articlesL));
             }else{
@@ -108,6 +124,8 @@ public class Controller implements Initializable {
     @FXML
     private  void getFromArticle(ActionEvent event){
         try{
+            this.dataArea.setText("");
+            this.textArea.setText("");
             this.article = this.crawler.getArticleFromUrl(this.crawler.getLinkFromName(this.articleCombo.getSelectionModel().getSelectedItem().toString(), this.articlesL));
         }catch (IOException e){
             e.printStackTrace();
@@ -135,31 +153,29 @@ public class Controller implements Initializable {
 
     @FXML
     private void chartAction(ActionEvent event){
-        try {
-            if (this.sectionCombo.getSelectionModel().getSelectedItem() != null) {
-                List<Integer> linksInMonth = new ArrayList<Integer>();
-                for(LinkMap month : this.monthsL){
-                    linksInMonth.add(this.crawler.getLinksFromMonth(month.getLink()).size());
-                }
-                XYChart.Series<String, Integer> series = new XYChart.Series<>();
-                for (int i = 0; i < linksInMonth.size(); i++){
-                    series.getData().add(new XYChart.Data<>(this.crawler.getNames(monthsL).get(i), linksInMonth.get(i)));
-                }
-                this.histogram.getData().add(series);
-            }else{
-                this.histogram.getData().clear();
-                List<Integer> linksInSection = new ArrayList<Integer>();
-                for(String sect : this.sections) {
-                    linksInSection.add(this.crawler.getLinksFromSection(sect).size());
-                }
-                XYChart.Series<String, Integer> series = new XYChart.Series<>();
-                for (int i = 0; i < linksInSection.size(); i++){
-                    series.getData().add(new XYChart.Data<>(this.sections.get(i), linksInSection.get(i)));
-                }
-                this.histogram.getData().add(series);
+        if (this.sectionCombo.getSelectionModel().getSelectedItem() != null) {
+            String currSect = this.sectionCombo.getSelectionModel().getSelectedItem().toString();
+            List<Integer> linksInMonth = this.sectionsList.get(this.sections.indexOf(currSect));
+            XYChart.Series<String, Integer> series = new XYChart.Series<>();
+            for (int i = 0; i < linksInMonth.size(); i++){
+                series.getData().add(new XYChart.Data<>(this.crawler.getNames(monthsL).get(i), linksInMonth.get(i)));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            this.histogram.getData().add(series);
+        }else{
+            this.histogram.getData().clear();
+            List<Integer> linksInSection = new ArrayList<Integer>();
+            for(int i = 0; i < this.sections.size(); i++) {
+                int sumMonth = 0;
+                for (Integer monthSize : this.sectionsList.get(i)){
+                    sumMonth += monthSize;
+                }
+                linksInSection.add(sumMonth);
+            }
+            XYChart.Series<String, Integer> series = new XYChart.Series<>();
+            for (int i = 0; i < this.sections.size(); i++){
+                series.getData().add(new XYChart.Data<>(this.sections.get(i), linksInSection.get(i)));
+            }
+            this.histogram.getData().add(series);
         }
     }
 
