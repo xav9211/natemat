@@ -1,4 +1,4 @@
-package main.java.pl.edu.agh.sius.crawler;
+package main.java.pl.edu.agh.sius.model;
 
 /**
  * Created by xav92 on 10.06.15.

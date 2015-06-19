@@ -14,9 +14,8 @@ import java.net.URL;
 import java.util.*;
 
 import main.java.pl.edu.agh.sius.crawler.ICrawlerService;
-import main.java.pl.edu.agh.sius.crawler.LinkMap;
+import main.java.pl.edu.agh.sius.model.*;
 import main.java.pl.edu.agh.sius.crawler.NaTematCrawlerService;
-import main.java.pl.edu.agh.sius.model.Article;
 
 public class Controller implements Initializable {
 
